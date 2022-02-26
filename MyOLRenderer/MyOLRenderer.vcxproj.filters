@@ -24,12 +24,18 @@
     <ClCompile Include="src\core\geometry.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\transform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\MyOFRenderer.h">
       <Filter>源文件\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\geometry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\transform.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

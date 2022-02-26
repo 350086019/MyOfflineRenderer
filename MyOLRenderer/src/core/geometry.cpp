@@ -30,12 +30,12 @@ namespace MyOFRenderer {
 	//最小元素
 	template <typename T> 
 	T MinComponent(const Vector2<T>& v) {
-		return min(v.x, v.y);
+		return std::min(v.x, v.y);
 	}
 	//最大元素
 	template <typename T> 
 	T MaxComponent(const Vector2<T>& v) {
-		return max(v.x, v.y);
+		return std::max(v.x, v.y);
 	}
 	//最大的下标
 	template <typename T>
@@ -63,6 +63,7 @@ namespace MyOFRenderer {
 	inline Vector3<T> operator*(T s, const Vector3<T>& v) {
 		return v * s;
 	}
+
 	//绝对值
 	template<typename T>
 	Vector3<T> Abs(const Vector3<T>& v) {
@@ -91,12 +92,12 @@ namespace MyOFRenderer {
 	//最小元素
 	template <typename T> 
 	T MinComponent(const Vector3<T>& v) {
-		return min(v.x, min(v.y, v.z));
+		return std::min(v.x, std::min(v.y, v.z));
 	}
 	//最大元素
 	template <typename T> 
 	T MaxComponent(const Vector3<T>& v) {
-		return max(v.x, max(v.y, v.z));
+		return std::max(v.x, std::max(v.y, v.z));
 	}
 	//最大的下标
 	template <typename T> 
@@ -139,12 +140,12 @@ namespace MyOFRenderer {
 	//各元素最大
 	template <typename T> Point2<T>
 	Min(const Point2<T>& p1, const Point2<T>& p2) {
-		return Point2<T>(min(p1.x, p2.x), min(p1.y, p2.y));
+		return Point2<T>(std::min(p1.x, p2.x), std::min(p1.y, p2.y));
 	}
 	//各元素最小
 	template <typename T> Point2<T>
 	Max(const Point2<T>& p1, const Point2<T>& p2) {
-		return Point2<T>(max(p1.x, p2.x), max(p1.y, p2.y));
+		return Point2<T>(std::max(p1.x, p2.x), std::max(p1.y, p2.y));
 	}
 	//下取整
 	template <typename T> Point2<T> Floor(const Point2<T>& p) {
@@ -186,14 +187,14 @@ namespace MyOFRenderer {
 	//各元素最大
 	template <typename T> Point3<T>
 	Min(const Point3<T>& p1, const Point3<T>& p2) {
-		return Point3<T>(min(p1.x, p2.x), min(p1.y, p2.y),
-				min(p1.z, p2.z));
+		return Point3<T>(std::min(p1.x, p2.x), std::min(p1.y, p2.y),
+				std::min(p1.z, p2.z));
 	}
 	//各元素最小
 	template <typename T> Point3<T>
 	Max(const Point3<T>& p1, const Point3<T>& p2) {
-		return Point3<T>(max(p1.x, p2.x), max(p1.y, p2.y),
-				max(p1.z, p2.z));
+		return Point3<T>(std::max(p1.x, p2.x), std::max(p1.y, p2.y),
+				std::max(p1.z, p2.z));
 	}
 	//下取整
 	template <typename T> Point3<T> Floor(const Point3<T>& p) {
@@ -237,5 +238,111 @@ namespace MyOFRenderer {
 		return (Dot(n, v) < 0.f) ? -n : n;
 	}
 
+	//---------------Bounds3--------------------//
+	//包围盒求并
+	template <typename T> 
+	Bounds3 <T> Union(const Bounds3<T>& b, const Point3<T>& p) {
+		return Bounds3<T>(Point3<T>(std::min(b.pMin.x, p.x),
+			std::min(b.pMin.y, p.y),
+			std::min(b.pMin.z, p.z)),
+			Point3<T>(std::max(b.pMax.x, p.x),
+				std::max(b.pMax.y, p.y),
+				std::max(b.pMax.z, p.z)));
+	}
+	template <typename T> 
+	Bounds3<T> Union(const Bounds3<T>& b1, const Bounds3<T>& b2) {
+		return Bounds3<T>(Point3<T>(std::min(b1.pMin.x, b2.pMin.x),
+			std::min(b1.pMin.y, b2.pMin.y),
+			std::min(b1.pMin.z, b2.pMin.z)),
+			Point3<T>(std::max(b1.pMax.x, b2.pMax.x),
+				std::max(b1.pMax.y, b2.pMax.y),
+				std::max(b1.pMax.z, b2.pMax.z)));
+	}
+	//包围盒求交
+	template <typename T> 
+	Bounds3<T> Intersect(const Bounds3<T>& b1, const Bounds3<T>& b2) {
+		return Bounds3<T>(Point3<T>(std::max(b1.pMin.x, b2.pMin.x),
+			std::max(b1.pMin.y, b2.pMin.y),
+			std::max(b1.pMin.z, b2.pMin.z)),
+			Point3<T>(std::min(b1.pMax.x, b2.pMax.x),
+				std::min(b1.pMax.y, b2.pMax.y),
+				std::min(b1.pMax.z, b2.pMax.z)));
+	}
+	//相交检测
+	template <typename T>
+	bool Overlaps(const Bounds3<T>& b1, const Bounds3<T>& b2) {
+		bool x = (b1.pMax.x >= b2.pMin.x) && (b1.pMin.x <= b2.pMax.x);
+		bool y = (b1.pMax.y >= b2.pMin.y) && (b1.pMin.y <= b2.pMax.y);
+		bool z = (b1.pMax.z >= b2.pMin.z) && (b1.pMin.z <= b2.pMax.z);
+		return (x && y && z);
+	}
+	//内部检测
+	template <typename T>
+	bool Inside(const Point3<T>& p, const Bounds3<T>& b) {
+		return (p.x >= b.pMin.x && p.x <= b.pMax.x &&
+			p.y >= b.pMin.y && p.y <= b.pMax.y &&
+			p.z >= b.pMin.z && p.z <= b.pMax.z);
+	}
+	template <typename T>
+	bool InsideExclusive(const Point3<T>& p, const Bounds3<T>& b) {
+		return (p.x >= b.pMin.x && p.x < b.pMax.x&&
+			p.y >= b.pMin.y && p.y < b.pMax.y&&
+			p.z >= b.pMin.z && p.z < b.pMax.z);
+	}//不包括右上边
+	//扩大
+	template <typename T, typename U> 
+	inline Bounds3<T> Expand(const Bounds3<T>& b, U delta) {
+		return Bounds3<T>(b.pMin - Vector3<T>(delta, delta, delta),
+			b.pMax + Vector3<T>(delta, delta, delta));
+	}
+	//---------------Bounds2--------------------//
+	//包围盒求并
+	template <typename T>
+	Bounds2 <T> Union(const Bounds2<T>& b, const Point2<T>& p) {
+		return Bounds2<T>(Point2<T>(std::min(b.pMin.x, p.x),
+			std::min(b.pMin.y, p.y)),
+			Point2<T>(std::max(b.pMax.x, p.x),
+				std::max(b.pMax.y, p.y)));
+	}
+	template <typename T>
+	Bounds2<T> Union(const Bounds2<T>& b1, const Bounds2<T>& b2) {
+		return Bounds2<T>(Point2<T>(std::min(b1.pMin.x, b2.pMin.x),
+			std::min(b1.pMin.y, b2.pMin.y)),
+			Point2<T>(std::max(b1.pMax.x, b2.pMax.x),
+				std::max(b1.pMax.y, b2.pMax.y)));
+	}
+	//包围盒求交
+	template <typename T>
+	Bounds2<T> Intersect(const Bounds2<T>& b1, const Bounds2<T>& b2) {
+		return Bounds2<T>(Point2<T>(std::max(b1.pMin.x, b2.pMin.x),
+			std::max(b1.pMin.y, b2.pMin.y)),
+			Point2<T>(std::min(b1.pMax.x, b2.pMax.x),
+				std::min(b1.pMax.y, b2.pMax.y)));
+	}
+	//相交检测
+	template <typename T>
+	bool Overlaps(const Bounds2<T>& b1, const Bounds2<T>& b2) {
+		bool x = (b1.pMax.x >= b2.pMin.x) && (b1.pMin.x <= b2.pMax.x);
+		bool y = (b1.pMax.y >= b2.pMin.y) && (b1.pMin.y <= b2.pMax.y);
+		return (x && y);
+	}
+	//内部检测
+	template <typename T>
+	bool Inside(const Point2<T>& p, const Bounds2<T>& b) {
+		return (p.x >= b.pMin.x && p.x <= b.pMax.x &&
+			p.y >= b.pMin.y && p.y <= b.pMax.y);
+	}
+	template <typename T>
+	bool InsideExclusive(const Point2<T>& p, const Bounds2<T>& b) {
+		return (p.x >= b.pMin.x && p.x < b.pMax.x&&
+			p.y >= b.pMin.y && p.y < b.pMax.y);
+	}//不包括右上边
+	//扩大
+	template <typename T, typename U>
+	inline Bounds2<T> Expand(const Bounds2<T>& b, U delta) {
+		return Bounds2<T>(b.pMin - Vector2<T>(delta, delta),
+			b.pMax + Vector2<T>(delta, delta));
+	}
+	
 
 }

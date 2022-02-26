@@ -22,3 +22,6 @@ MyOLRenderer/Debug/MyOLRenderer.tlog/link.write.1.tlog
 MyOLRenderer/Debug/MyOLRenderer.tlog/MyOLRenderer.lastbuildstate
 MyOLRenderer/Debug/vc142.idb
 MyOLRenderer/Debug/vc142.pdb
+.vs/MyOLRenderer/v16/ipch/AutoPCH/f3699a770d81a254/MYOLRENDERER.ipch
+.vs/MyOLRenderer/v16/ipch/AutoPCH/cd245a30b56d8bae/TRANSFORM.ipch
+*.tlog

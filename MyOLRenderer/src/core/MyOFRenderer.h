@@ -2,6 +2,7 @@
 #include<assert.h>
 #include<math.h>
 #include<iostream>
+#include<cmath>
 
 namespace MyOFRenderer {
 	//classes
@@ -16,4 +17,11 @@ namespace MyOFRenderer {
 	template <typename T>
 	class Normal3;
 	class Ray;
+	class RayDifferential;
+	template<typename T>
+	class Bounds3;
+	template<typename T>
+	class Bounds2;
+
+	inline float Lerp(float t, float v1, float v2) { return (1 - t) * v1 + t * v2; }
 }

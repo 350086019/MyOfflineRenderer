@@ -399,8 +399,183 @@ namespace MyOFRenderer {
 	class Ray {
 	public:
 		//methods
+		Ray():tMax(INFINITY){}
+		Ray(const Point3f &p,const Vector3f &v,float tMax = INFINITY):o(p),d(v),tMax(tMax){}
+		
+		Point3f operator()(float t) { return o + (d * t); }
+
 		//data
 		Point3f o;
 		Vector3f d;
+		mutable float tMax;
+	};
+
+	//微分光线
+	class RayDifferential :public Ray {
+	public:
+		//Methods
+		RayDifferential() { hasDifferentials = false; }
+		RayDifferential(const Point3f& p, const Vector3f& v, float tMax = INFINITY) :Ray(o, d, tMax) { hasDifferentials = false; }
+		RayDifferential(const Ray &r):Ray(r) { hasDifferentials = false; }
+
+		void ScaleDifferentials(float s) {
+			rxOrigin = o + (rxOrigin - o) * s;
+			ryOrigin = o + (ryOrigin - o) * s;
+			rxDirection = d + (rxDirection - d) * s;
+			ryDirection = d + (ryDirection - d) * s;
+		}
+		//Data
+		bool hasDifferentials;
+		Point3f rxOrigin, ryOrigin;
+		Vector3f rxDirection, ryDirection;
+
+	};
+
+
+	typedef Bounds2<float> Bounds2f;
+	typedef Bounds2<int>   Bounds2i;
+	typedef Bounds3<float> Bounds3f;
+	typedef Bounds3<int>   Bounds3i;
+	//包围盒
+	template<typename T>
+	class Bounds3 {
+	public: 
+		//Methods
+		Bounds3() {
+			T minNum = std::numeric_limits<T>::lowest();
+			T maxNum = std::numeric_limits<T>::max();
+			pMin = Point3<T>(maxNum, maxNum, maxNum);
+			pMax = Point3<T>(minNum, minNum, minNum);//默认空盒子
+		}
+		Bounds3(const Point3<T> &p):pMin(p),pMax(p){}//包围一个点
+		Bounds3(const Point3<T>& p1, const Point3<T>& p2) : pMin(std::min(p1.x, p2.x), std::min(p1.y, p2.y),
+			std::min(p1.z, p2.z)),
+			pMax(std::max(p1.x, p2.x), std::max(p1.y, p2.y),
+				std::max(p1.z, p2.z)) {}
+
+		const Point3<T>& operator[](int i) const {
+			assert(i >= 0 && i <= 1);
+			return i ? pMax : pMin;
+		}
+		Point3<T>& operator[](int i) {
+			assert(i >= 0 && i <= 1);
+			return i ? pMax : pMin;
+		}
+
+		Point3<T> Corner(int corner) const {
+			return Point3<T>((*this)[(corner & 1)].x,
+				(*this)[(corner & 2) ? 1 : 0].y,
+				(*this)[(corner & 4) ? 1 : 0].z);
+		}
+
+		//返回对角向量
+		Vector3<T> Diagonal() const { return pMax - pMin; }
+		//表面积
+		T SurfaceArea() const {
+			Vector3<T> d = Diagonal();
+			return 2 * (d.x * d.y + d.x * d.z + d.y * d.z);
+		}
+		//体积
+		T Volume() const {
+			Vector3<T> d = Diagonal();
+			return d.x * d.y * d.z;
+		}
+		//最长边
+		int MaximumExtent() const {
+			Vector3<T> d = Diagonal();
+			if (d.x > d.y && d.x > d.z)
+				return 0;
+			else if (d.y > d.z)
+				return 1;
+			else
+				return 2;
+		}
+		//插值
+		Point3<T> Lerp(const Point3f& t) const {
+			return Point3<T>(::Lerp(t.x, pMin.x, pMax.x),
+				::Lerp(t.y, pMin.y, pMax.y),
+				::Lerp(t.z, pMin.z, pMax.z));
+		}
+
+		Vector3<T> Offset(const Point3<T>& p) const {
+			Vector3<T> o = p - pMin;
+			if (pMax.x > pMin.x) o.x /= pMax.x - pMin.x;
+			if (pMax.y > pMin.y) o.y /= pMax.y - pMin.y;
+			if (pMax.z > pMin.z) o.z /= pMax.z - pMin.z;
+			return o;
+		}
+		//包围球
+		void BoundingSphere(Point3<T>* center, float* radius) const {
+			*center = (pMin + pMax) / 2;
+			*radius = Inside(*center, *this) ? Distance(*center, pMax) : 0;
+		}
+		//Data
+		Point3f pMin, pMax;
+	};
+
+	//包围盒
+	template<typename T>
+	class Bounds2 {
+	public:
+		//Methods
+		Bounds2() {
+			T minNum = std::numeric_limits<T>::lowest();
+			T maxNum = std::numeric_limits<T>::max();
+			pMin = Point2<T>(maxNum, maxNum);
+			pMax = Point2<T>(minNum, minNum);//默认空盒子
+		}
+		Bounds2(const Point2<T>& p) :pMin(p), pMax(p) {}//包围一个点
+		Bounds2(const Point2<T>& p1, const Point2<T>& p2) : pMin(std::min(p1.x, p2.x), std::min(p1.y, p2.y)),
+			pMax(std::max(p1.x, p2.x), std::max(p1.y, p2.y)) {}
+
+		const Point2<T>& operator[](int i) const {
+			assert(i >= 0 && i <= 1);
+			return i ? pMax : pMin;
+		}
+		Point2<T>& operator[](int i) {
+			assert(i >= 0 && i <= 1);
+			return i ? pMax : pMin;
+		}
+
+		Point2<T> Corner(int corner) const {
+			return Point2<T>((*this)[(corner & 1)].x,
+				(*this)[(corner & 2) ? 1 : 0].y);
+		}
+
+		//返回对角向量
+		Vector2<T> Diagonal() const { return pMax - pMin; }
+		//表面积
+		T SurfaceArea() const {
+			Vector2<T> d = Diagonal();
+			return d.x * d.y;
+		}
+
+		//最长边
+		int MaximumExtent() const {
+			Vector2<T> d = Diagonal();
+			if (d.x > d.y)
+				return 0;
+			else
+				return 1;
+		}
+		//插值
+		Point2<T> Lerp(const Point2f& t) const {
+			return Point2<T>(::Lerp(t.x, pMin.x, pMax.x),
+				::Lerp(t.y, pMin.y, pMax.y));
+		}
+
+		Vector2<T> Offset(const Point2<T>& p) const {
+			Vector2<T> o = p - pMin;
+			if (pMax.x > pMin.x) o.x /= pMax.x - pMin.x;
+			if (pMax.y > pMin.y) o.y /= pMax.y - pMin.y;
+			return o;
+		}
+		//包围球
+		void BoundingSphere(Point2<T>* center, float* radius) const {
+			*center = (pMin + pMax) / 2;
+			*radius = Inside(*center, *this) ? Distance(*center, pMax) : 0;
+		}
+		//Data
+		Point2f pMin, pMax;
 	};
 }

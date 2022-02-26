@@ -141,10 +141,12 @@
   <ItemGroup>
     <ClCompile Include="MyOLRenderer.cpp" />
     <ClCompile Include="src\core\geometry.cpp" />
+    <ClCompile Include="src\core\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\geometry.h" />
     <ClInclude Include="src\core\MyOFRenderer.h" />
+    <ClInclude Include="src\core\transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

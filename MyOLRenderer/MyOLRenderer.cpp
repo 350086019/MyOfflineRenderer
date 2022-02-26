@@ -2,9 +2,14 @@
 //
 
 #include <iostream>
+#include"src/core/MyOFRenderer.h"
+#include"src/core/geometry.h"
+using namespace MyOFRenderer;
 
 int main()
 {
+    //Bounds3f b(Point3f(0, 0, 0), Point3f(0, 0, 0));
+    //b.Lerp(Point3f(0.5,0.5,0.5));
     std::cout << "Hello World!\n";
 }
 
