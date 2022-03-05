@@ -3,6 +3,15 @@
 #include<math.h>
 #include<iostream>
 #include<cmath>
+#include<string>
+#include <type_traits>
+#include <algorithm>
+#include <cinttypes>
+#include <limits>
+#include <memory>
+#include <vector>
+#include <assert.h>
+#include <string.h>
 
 namespace MyOFRenderer {
 	//classes
