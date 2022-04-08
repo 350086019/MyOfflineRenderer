@@ -2,7 +2,7 @@
 #include"MyOFRenderer.h"
 #include"geometry.h"
 
-namespace MyOLRenderer {
+namespace MyOFRenderer {
     // Matrix4x4 Declarations
     struct Matrix4x4 {
         // Matrix4x4 Public Methods
@@ -85,6 +85,7 @@ namespace MyOLRenderer {
         Transform(const Matrix4x4& m, const Matrix4x4& mInv)
             : m(m), mInv(mInv) {
         }
+
 
         friend Transform Inverse(const Transform& t) {
             return Transform(t.mInv, t.m);

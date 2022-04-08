@@ -32,5 +32,16 @@ namespace MyOFRenderer {
 	template<typename T>
 	class Bounds2;
 
+	static float ShadowEpsilon = 0.0001f;
+	static float Pi = 3.14159265358979323846;
+	static float InvPi = 0.31830988618379067154;
+	static float Inv2Pi = 0.15915494309189533577;
+	static float Inv4Pi = 0.07957747154594766788;
+	static float PiOver2 = 1.57079632679489661923;
+	static float PiOver4 = 0.78539816339744830961;
+	static float Sqrt2 = 1.41421356237309504880;
+
 	inline float Lerp(float t, float v1, float v2) { return (1 - t) * v1 + t * v2; }
+
+	inline float Radians(float deg) { return (Pi / 180) * deg; }
 }
