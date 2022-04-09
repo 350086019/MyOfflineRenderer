@@ -14,6 +14,8 @@
 #include <string.h>
 
 namespace MyOFRenderer {
+	#define MachineEpsilon (std::numeric_limits<float>::epsilon() * 0.5)
+
 	//classes
 	template<typename T>
 	class Vector2;
@@ -31,6 +33,8 @@ namespace MyOFRenderer {
 	class Bounds3;
 	template<typename T>
 	class Bounds2;
+	class Shape;
+	class SurfaceInteraction;
 
 	static float ShadowEpsilon = 0.0001f;
 	static float Pi = 3.14159265358979323846;
@@ -44,4 +48,8 @@ namespace MyOFRenderer {
 	inline float Lerp(float t, float v1, float v2) { return (1 - t) * v1 + t * v2; }
 
 	inline float Radians(float deg) { return (Pi / 180) * deg; }
+
+	inline float gamma(int n) {
+		return (n * MachineEpsilon) / (1 - n * MachineEpsilon);
+	}
 }

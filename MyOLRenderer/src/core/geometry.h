@@ -510,6 +510,8 @@ namespace MyOFRenderer {
 			*center = (pMin + pMax) / 2;
 			*radius = Inside(*center, *this) ? Distance(*center, pMax) : 0;
 		}
+		bool IntersectP(const Ray&, float*, float*) const;
+		bool IntersectP(const Ray&, const Vector3f&,const int[3]) const;
 		//Data
 		Point3f pMin, pMax;
 	};
@@ -814,6 +816,10 @@ namespace MyOFRenderer {
 	}
 	template <typename T>
 	inline Normal3<T> Faceforward(const Normal3<T>& n, const Vector3<T>& v) {
+		return (Dot(n, v) < 0.f) ? -n : n;
+	}
+	template <typename T>
+	inline Normal3<T> Faceforward(const Normal3<T>& n, const Normal3<T>& v) {
 		return (Dot(n, v) < 0.f) ? -n : n;
 	}
 
