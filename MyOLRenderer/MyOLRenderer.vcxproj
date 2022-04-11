@@ -144,6 +144,7 @@
     <ClCompile Include="src\core\shape.cpp" />
     <ClCompile Include="src\core\transform.cpp" />
     <ClCompile Include="src\core\interaction.cpp" />
+    <ClCompile Include="src\shapes\sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\geometry.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="src\core\shape.h" />
     <ClInclude Include="src\core\transform.h" />
     <ClInclude Include="src\core\interaction.h" />
+    <ClInclude Include="src\shapes\sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

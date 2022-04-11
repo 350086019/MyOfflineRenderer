@@ -33,6 +33,9 @@
     <ClCompile Include="src\core\shape.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\shapes\sphere.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\MyOFRenderer.h">
@@ -48,6 +51,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\core\shape.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shapes\sphere.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
