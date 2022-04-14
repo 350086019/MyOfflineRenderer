@@ -14,7 +14,7 @@ namespace MyOFRenderer {
 		Vector2() { x = y = 0; }
 		Vector2(T x, T y) :x(x), y(y) { assert(!HasNaNs()); }
 
-		bool HasNaNs() {
+		bool HasNaNs() const{
 			return isnan(x) || isnan(y);
 		}
 		//长度
@@ -85,7 +85,7 @@ namespace MyOFRenderer {
 		Vector3(T x, T y, T z) :x(x), y(y), z(z) { assert(!HasNaNs()); }
 		Vector3(const Normal3<T>&);
 
-		bool HasNaNs() {
+		bool HasNaNs() const{
 			return isnan(x) || isnan(y) || isnan(z);
 		}
 		//长度
@@ -172,7 +172,7 @@ namespace MyOFRenderer {
 		explicit operator Vector3<U>() {
 			return Vector3<U>(x, y, z);
 		}
-		bool HasNaNs() {
+		bool HasNaNs() const{
 			return isnan(x) || isnan(y) || isnan(z);
 		}
 
@@ -202,6 +202,14 @@ namespace MyOFRenderer {
 		}
 		Point3<T>& operator*=(const T s) {
 			x *= s; y *= s; z *= s;
+			return *this;
+		}
+		//标量除
+		Point3<T> operator/(const T s)const {
+			return Point3<T>(x / s, y / s, z / s);
+		}
+		Point3<T>& operator/=(const T s) {
+			x /= s; y /= s; z /= s;
 			return *this;
 		}
 		//点加点
@@ -242,7 +250,7 @@ namespace MyOFRenderer {
 			assert(!HasNaNs());
 		}
 
-		bool HasNaNs() {
+		bool HasNaNs() const{
 			return isnan(x) || isnan(y);
 		}
 		//点加向量
@@ -807,6 +815,10 @@ namespace MyOFRenderer {
 	//点乘
 	template<typename T>
 	inline T Dot(const Normal3<T>& n1, const Vector3<T>& v2) {
+		return n1.x * v2.x + n1.y * v2.y + n1.z * v2.z;
+	}
+	template<typename T>
+	inline T Dot(const Normal3<T>& n1, const Normal3<T>& v2) {
 		return n1.x * v2.x + n1.y * v2.y + n1.z * v2.z;
 	}
 	//绝对值点乘

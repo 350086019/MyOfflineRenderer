@@ -70,4 +70,14 @@ namespace MyOFRenderer {
 		if (*t0 > *t1) std::swap(*t0, *t1);
 		return true;
 	}
+
+	template <typename T, typename U, typename V>
+	inline T Clamp(T val, U low, V high) {
+		if (val < low)
+			return low;
+		else if (val > high)
+			return high;
+		else
+			return val;
+	}
 }

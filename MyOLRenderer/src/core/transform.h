@@ -186,7 +186,7 @@ namespace MyOFRenderer {
             ret.shading.dpdv = t(si.shading.dpdv);
             ret.shading.dndu = t(si.shading.dndu);
             ret.shading.dndv = t(si.shading.dndv);
-            ret.dudx = si.dudx;
+            /*ret.dudx = si.dudx;
             ret.dvdx = si.dvdx;
             ret.dudy = si.dudy;
             ret.dvdy = si.dvdy;
@@ -194,7 +194,8 @@ namespace MyOFRenderer {
             ret.dpdy = t(si.dpdy);
             ret.bsdf = si.bsdf;
             ret.bssrdf = si.bssrdf;
-            ret.primitive = si.primitive;
+            ret.primitive = si.primitive;*/
+            
             //    ret.n = Faceforward(ret.n, ret.shading.n);
             ret.shading.n = Faceforward(ret.shading.n, ret.n);
             return ret;
