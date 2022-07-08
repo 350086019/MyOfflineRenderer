@@ -24,6 +24,7 @@
     <ProjectGuid>{6459589a-1689-4944-8b6a-ae646358aa90}</ProjectGuid>
     <RootNamespace>MyOLRenderer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>MyOFRenderer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
