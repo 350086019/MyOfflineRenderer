@@ -3,10 +3,10 @@
 #include"../core/MyOFRenderer.h"
 
 namespace MyOFRenderer {
-    class Sphere : public Shape {
+    class Triangle : public Shape {
     public:
         //<< Sphere Public Methods >>
-        Sphere(const Transform* ObjectToWorld, const Transform* WorldToObject,
+        Triangle(const Transform* ObjectToWorld, const Transform* WorldToObject,
             bool reverseOrientation, float radius)
             : Shape(ObjectToWorld, WorldToObject, reverseOrientation),
             radius(radius) { }
