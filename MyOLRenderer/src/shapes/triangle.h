@@ -3,6 +3,24 @@
 #include"../core/MyOFRenderer.h"
 
 namespace MyOFRenderer {
+    struct TriangleMesh {
+        //Methods
+        TriangleMesh(const Transform& ObjectToWorld,
+            int nTriangles, const int* vertexIndices, int nVertices,
+            const Point3f* P, const Vector3f* S, const Normal3f* N,
+            const Point2f* UV);
+            //,const std::shared_ptr<Texture<Float>>& alphaMask
+        
+        //Data
+        const int nTriangles, nVertices;
+        std::vector<int> vertexIndices;
+        std::unique_ptr<Point3f[]> p;
+        std::unique_ptr<Normal3f[]> n;
+        std::unique_ptr<Vector3f[]> s;
+        std::unique_ptr<Point2f[]> uv;
+        //std::shared_ptr<Texture<Float>> alphaMask;
+    };
+
     class Triangle : public Shape {
     public:
         //<< Sphere Public Methods >>
