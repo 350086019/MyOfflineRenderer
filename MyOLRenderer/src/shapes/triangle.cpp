@@ -28,30 +28,30 @@ namespace MyOFRenderer {
         }
     }
         
- 
 
-    class Triangle : public Shape {
-    public:
-        //<< Sphere Public Methods >>
-        Triangle(const Transform* ObjectToWorld, const Transform* WorldToObject,
-            bool reverseOrientation, float radius)
-            : Shape(ObjectToWorld, WorldToObject, reverseOrientation),
-            radius(radius) { }
+    std::vector<std::shared_ptr<Shape>> Triangle::CreateTriangleMesh(
+        const Transform* ObjectToWorld, const Transform* WorldToObject,
+        bool reverseOrientation, int nTriangles,
+        const int* vertexIndices, int nVertices, const Point3f* p,
+        const Vector3f* s, const Normal3f* n, const Point2f* uv)
+        //const std::shared_ptr<Texture<Float>>& alphaMask) 
+    {
+        std::shared_ptr<TriangleMesh> mesh = std::make_shared<TriangleMesh>(
+            *ObjectToWorld, nTriangles, vertexIndices, nVertices, p, s, n, uv);
+        std::vector<std::shared_ptr<Shape>> tris;
+        for (int i = 0; i < nTriangles; ++i)
+            tris.push_back(std::make_shared<Triangle>(ObjectToWorld,
+                WorldToObject, reverseOrientation, mesh, i));
+        return tris;
+    }
 
-        Bounds3f ObjectBound() const;
+    Bounds3f Triangle::ObjectBound() const {
+        //<< Get triangle vertices in p0, p1, and p2 >>
+        const Point3f& p0 = mesh->p[v[0]];
+        const Point3f& p1 = mesh->p[v[1]];
+        const Point3f& p2 = mesh->p[v[2]];
 
-        bool Intersect(const Ray& r, float* tHit,
-            SurfaceInteraction* isect, bool testAlphaTexture) const;
-
-        bool IntersectP(const Ray& r,
-            bool testAlphaTexture) const;
-
-        float Area() const;
-
-    private:
-        //<< Sphere Private Data >>
-        const float radius;
-        //const float zMin, zMax;
-        //const float 0, Pi, (2*Pi);
+        return Union(Bounds3f((*WorldToObject)(p0), (*WorldToObject)(p1)),
+            (*WorldToObject)(p2));
     };
 }

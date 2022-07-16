@@ -30,6 +30,13 @@ namespace MyOFRenderer {
             v = &mesh->vertexIndices[3 * triNumber];
         }
 
+        //从别的shape转化成一系列triangle
+        std::vector<std::shared_ptr<Shape>> CreateTriangleMesh(
+            const Transform* ObjectToWorld, const Transform* WorldToObject,
+            bool reverseOrientation, int nTriangles,
+            const int* vertexIndices, int nVertices, const Point3f* p,
+            const Vector3f* s, const Normal3f* n, const Point2f* uv);
+
         Bounds3f ObjectBound() const;
 
         bool Intersect(const Ray& r, float* tHit,
