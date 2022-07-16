@@ -23,11 +23,12 @@ namespace MyOFRenderer {
 
     class Triangle : public Shape {
     public:
-        //<< Sphere Public Methods >>
         Triangle(const Transform* ObjectToWorld, const Transform* WorldToObject,
-            bool reverseOrientation, float radius)
+            bool reverseOrientation, const std::shared_ptr<TriangleMesh>& mesh, int triNumber)
             : Shape(ObjectToWorld, WorldToObject, reverseOrientation),
-            radius(radius) { }
+            mesh(mesh) {
+            v = &mesh->vertexIndices[3 * triNumber];
+        }
 
         Bounds3f ObjectBound() const;
 
@@ -40,9 +41,9 @@ namespace MyOFRenderer {
         float Area() const;
 
     private:
-        //<< Sphere Private Data >>
-        const float radius;
-        //const float zMin, zMax;
-        //const float 0, Pi, (2*Pi);
+        //Data
+        std::shared_ptr<TriangleMesh> mesh;
+        const int* v;
+
     };
 }
