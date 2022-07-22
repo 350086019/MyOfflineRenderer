@@ -84,6 +84,7 @@ namespace MyOFRenderer {
 		Vector3() { x = y = z = 0; }
 		Vector3(T x, T y, T z) :x(x), y(y), z(z) { assert(!HasNaNs()); }
 		Vector3(const Normal3<T>&);
+		Vector3(const Point3<T>&);
 
 		bool HasNaNs() const{
 			return isnan(x) || isnan(y) || isnan(z);
@@ -647,6 +648,22 @@ namespace MyOFRenderer {
 			(v1z * v2x) - (v1x * v2z),
 			(v1x * v2y) - (v1y * v2x));
 	}
+	template <typename T>
+	inline Vector3<T> Cross(const Normal3<T>& v1, const Vector3<T>& v2) {
+		double v1x = v1.x, v1y = v1.y, v1z = v1.z;
+		double v2x = v2.x, v2y = v2.y, v2z = v2.z;
+		return Vector3<T>((v1y * v2z) - (v1z * v2y),
+			(v1z * v2x) - (v1x * v2z),
+			(v1x * v2y) - (v1y * v2x));
+	}
+	template <typename T>
+	inline Vector3<T> Cross(const Vector3<T>& v1, const Normal3<T>& v2) {
+		double v1x = v1.x, v1y = v1.y, v1z = v1.z;
+		double v2x = v2.x, v2y = v2.y, v2z = v2.z;
+		return Vector3<T>((v1y * v2z) - (v1z * v2y),
+			(v1z * v2x) - (v1x * v2z),
+			(v1x * v2y) - (v1y * v2x));
+	}
 	//±Í¡ø≥À
 	template<typename T>
 	inline Vector3<T> operator*(T s, const Vector3<T>& v) {
@@ -812,6 +829,10 @@ namespace MyOFRenderer {
 	inline Vector3<T>::Vector3(const Normal3<T>& n) : x(n.x), y(n.y), z(n.z) {
 		assert(!n.HasNaNs());
 	}
+	template<typename T>
+	inline Vector3<T>::Vector3(const Point3<T>& p) : x(p.x), y(p.y), z(p.z) {
+		assert(!n.HasNaNs());
+	}
 	//µ„≥À
 	template<typename T>
 	inline T Dot(const Normal3<T>& n1, const Vector3<T>& v2) {
@@ -833,6 +854,11 @@ namespace MyOFRenderer {
 	template <typename T>
 	inline Normal3<T> Faceforward(const Normal3<T>& n, const Normal3<T>& v) {
 		return (Dot(n, v) < 0.f) ? -n : n;
+	}
+	//≥À
+	template<typename T>
+	inline Normal3<T> operator*(T f, const Normal3<T>& n) {
+		return n * f;
 	}
 
 	//---------------Bounds3--------------------//

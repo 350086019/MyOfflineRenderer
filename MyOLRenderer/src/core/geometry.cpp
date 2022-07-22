@@ -51,6 +51,7 @@ namespace MyOFRenderer {
 
         return (tMin < ray.tMax) && (tMax > 0);
     }
-	
+
+    
 
 }
